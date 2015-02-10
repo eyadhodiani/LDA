@@ -44,6 +44,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.topicGridView = new System.Windows.Forms.DataGridView();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.btnSave_Result = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.topicGridView)).BeginInit();
             this.SuspendLayout();
@@ -60,6 +61,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnSave_Result);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.textBoxOutput_Model_Path);
             this.groupBox1.Controls.Add(this.textBoxTotal_Iteration_Steps);
@@ -76,7 +78,7 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(0);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(0);
-            this.groupBox1.Size = new System.Drawing.Size(372, 568);
+            this.groupBox1.Size = new System.Drawing.Size(372, 665);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "LDA Param";
@@ -198,6 +200,16 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // btnSave_Result
+            // 
+            this.btnSave_Result.Location = new System.Drawing.Point(13, 549);
+            this.btnSave_Result.Name = "btnSave_Result";
+            this.btnSave_Result.Size = new System.Drawing.Size(347, 69);
+            this.btnSave_Result.TabIndex = 4;
+            this.btnSave_Result.Text = "Save Result (csv)";
+            this.btnSave_Result.UseVisualStyleBackColor = true;
+            this.btnSave_Result.Click += new System.EventHandler(this.btnSave_Result_Click);
+            // 
             // Viewer
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -237,6 +249,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView topicGridView;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Button btnSave_Result;
     }
 }
 

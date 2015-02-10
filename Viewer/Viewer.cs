@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,9 +45,10 @@ namespace Viewer
             UpdateTopicGridView();
         }
 
+        private DataTable topicTable;
         private void UpdateTopicGridView()
         {
-            var topicTable = new DataTable();
+            topicTable = new DataTable();
             foreach (var topicId in Enumerable.Range(0, Parameter.TopicCount))
             {
                 topicTable.Columns.Add(string.Format("Topic {0}", topicId));
@@ -102,7 +104,7 @@ namespace Viewer
                 }
             }
 
-            MessageBox.Show(path);
+           // MessageBox.Show(path);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -129,6 +131,43 @@ namespace Viewer
             catch
             {
                 // Log error.
+            }
+
+        }
+
+        private void btnSave_Result_Click(object sender, EventArgs e)
+        {
+            var csv = new StringBuilder();
+
+            //var newLine = string.Format("{0},{1}{2}", first, second, Environment.NewLine);
+            var newLine = "";
+            for (int i = 0; i < topicTable.Columns.Count; i++)
+            {
+                newLine += topicTable.Columns[i].ColumnName + ",";
+            }
+            newLine += Environment.NewLine;
+           
+
+            //-----------------------------------------------------------
+            for (int i = 0; i < topicTable.Rows.Count; i++)
+            {
+                for (int j = 0; j < topicTable.Columns.Count; j++)
+                {
+                    newLine += topicTable.Rows[i][j].ToString() + ",";
+                }
+                newLine += Environment.NewLine;
+                
+            }
+            csv.Append(newLine);
+            var filePath = path.Replace(".txt", ".csv");
+            File.WriteAllText(filePath, csv.ToString(), Encoding.UTF8);
+
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+           
+            startInfo.FileName = filePath;
+            using (Process exeProcess = Process.Start(startInfo))
+            {
+                exeProcess.WaitForExit();
             }
 
         }

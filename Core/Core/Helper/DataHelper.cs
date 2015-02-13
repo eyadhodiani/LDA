@@ -13,8 +13,66 @@ namespace Core.Helper
 {
     public static class DataHelper
     {
+        private static string clearSuffixes(string word)
+        {
+            //if (word == "منتخب")
+            //{
+            //    string m = "";
+            //}
+            if (word.Length < 2)
+                return "";
+
+            List<string> Suffixes = new List<string> { "ون", "ين", "ان", "ت", "تم", "تما", "تن", "تا", "تمو",  "ي", "نا", "وا", "ك", "كم", "كما", "كن", "ه", "ها", "هما", "هم", "هن", "نا", "ات" };
+            
+            var aa = Suffixes.ToArray().OrderByDescending(aux => aux.Length).ToArray();
+
+            foreach (var item in aa)
+            {
+                if (word.Length > item.Length)
+                {
+                    if (word.Substring(word.Length - item.Length, item.Length) == item)
+                    {
+                        word = word.Substring(0, word.Length - item.Length ) + word.Substring(word.Length - item.Length, item.Length).Replace(item, "");
+                        break;
+                    }
+                }
+            }
+            //
+
+            return word;
+        }
+        private static string clearPrefix(string word)
+        {
+            //if (word == "المنتخب")
+            //{
+            //    string m = "";
+            //}
+
+            if (word.Length < 2)
+                return "";
+
+
+            List<string> Prefix = new List<string> { "ولل", "وال", "ال", "لل", "ول", "فلل", "وب", "فب", "أب", "لب", "فل", "أل", "وك", "فك", "أك", "لك", "فو", "بال", "وبال", "فبال", "أبال", "وكال", "فكال", "أكال", "لكال", "وس", "فس", "أس", "است" };
+            var aa = Prefix.ToArray().OrderByDescending(aux => aux.Length).ToArray();
+
+            foreach (var item in aa)
+            {
+                if (word.Length > item.Length)
+                {
+                    if (word.Substring(0, item.Length) == item)
+                    {
+                        word = word.Substring(0, item.Length).Replace(item, "") + word.Substring(item.Length, word.Length - item.Length);
+                        break;
+                    }
+                }
+            }
+            //
+
+            return word;
+        }
         public static void LoadCorpus(this Parameter parameter, params char[] delimiter)
         {
+            //parameter.CorpusPath = @"C:\docs1\4ff550e2-a07e-43b9-bd4a-e776c30b60dc_35.txt";
             DataAccess cls = new DataAccess();
             string sql = "select * from [stopword]";
             DataSet ds = new DataSet();
@@ -27,6 +85,9 @@ namespace Core.Helper
 
 
             Console.WriteLine(parameter.CorpusPath);
+
+            sql = "delete from roots ";
+            m = cls.exeQuery(sql);
 
             if (parameter.CorpusPath.Contains(".txt"))
             {
@@ -43,6 +104,8 @@ namespace Core.Helper
                 {
                     contents = contents.Replace(replace[i], " ");
                 }
+
+              
                 foreach (var word in contents.ToLower().Split(delimiter))
                 {
                     if (word.Length >= 3)
@@ -60,11 +123,21 @@ namespace Core.Helper
 
                         if (found == false)
                         {
+                            string  token = clearPrefix(word);
+                            if (token.Length < 3)
+                            {
+                                continue;
+                            }
 
-                            new_contents += word + " ";
+                            token = clearSuffixes(token);
+                            if (token.Length < 3)
+                            {
+                                continue;
+                            }
+                            new_contents += token + " ";
 
-                            //sql = "insert into doc_words (id,doc_id,word) values(" + counter_words + "," + counter + ", N'" + word + "')";
-                            //m = cls.exeQuery(sql);
+                            sql = "insert into roots (root,word) values(  N'" + token + "', N'" + word + "')";
+                            m = cls.exeQuery(sql);
                             //counter_words += 1;
                         }
 
@@ -109,11 +182,21 @@ namespace Core.Helper
                             if (found == false)
                             {
 
-                                new_contents += word + " ";
+                                string token = clearPrefix(word);
+                                if (token.Length < 3)
+                                {
+                                    continue;
+                                }
 
-                                //sql = "insert into doc_words (id,doc_id,word) values(" + counter_words + "," + counter + ", N'" + word + "')";
-                                //m = cls.exeQuery(sql);
-                                //counter_words += 1;
+                                token = clearSuffixes(token);
+                                if (token.Length < 3)
+                                {
+                                    continue;
+                                }
+                                new_contents += token + " ";
+
+                                sql = "insert into roots (root,word) values(  N'" + token + "', N'" + word + "')";
+                                m = cls.exeQuery(sql);
                             }
 
 

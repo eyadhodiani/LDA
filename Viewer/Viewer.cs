@@ -88,6 +88,7 @@ namespace Viewer
         private string path = @"C:\docs1\";
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+           
             if (comboBox1.SelectedIndex == 1)
             {
                 if (modelFolderDialog.ShowDialog() == DialogResult.OK)
@@ -96,11 +97,18 @@ namespace Viewer
                 }
 
             }
-            else
+            else if (comboBox1.SelectedIndex == 0)
             {
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
                     path = openFileDialog1.FileName;
+                }
+            }
+            else
+            {
+                if (modelFolderDialog.ShowDialog() == DialogResult.OK)
+                {
+                    path = modelFolderDialog.SelectedPath;
                 }
             }
 
@@ -110,22 +118,55 @@ namespace Viewer
         private void button1_Click(object sender, EventArgs e)
         {
 
+            if (comboBox1.SelectedIndex == 2)
+            {
+                foreach (string file in Directory.EnumerateFiles(path, "*.txt"))
+                {
+                    ProcessStartInfo startInfo = new ProcessStartInfo();
+                    startInfo.CreateNoWindow = false;
+                    startInfo.UseShellExecute = false;
+                    startInfo.FileName = @"C:\eyad\Special Topics in Computer Science(1)\LDA\Tools\LatentDirichletAllocation\LatentDirichletAllocation-master\Core\Core\bin\x64\Debug\Core.exe";
+                    //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    startInfo.Arguments = file + " 0.5 0.1 " + textBoxTopicCount.Text + " " + textBoxTotal_Iteration_Steps.Text + " " + textBoxOutput_Model_Path.Text + "";
+
+                    //Dataset\newsdata.csv 0.5 0.1 1 1000 C:\Model
+                    try
+                    {
+                        // Start the process with the info we specified.
+                        // Call WaitForExit and then the using statement will close.
+                        using (Process exeProcess = Process.Start(startInfo))
+                        {
+                            exeProcess.WaitForExit();
+                            buttonLoadModel_Click(sender, e);
+                            save_result(file);
+                            //MessageBox.Show("done");
+                        }
+                    }
+                    catch
+                    {
+                        // Log error.
+                    }
+                }
+                MessageBox.Show("done");
+                return;
+            }
             // Use ProcessStartInfo class
-            ProcessStartInfo startInfo = new ProcessStartInfo();
+            ProcessStartInfo startInfo1 = new ProcessStartInfo();
             //startInfo.CreateNoWindow = false;
             //startInfo.UseShellExecute = false;
-            startInfo.FileName = @"C:\eyad\Special Topics in Computer Science(1)\LDA\Tools\LatentDirichletAllocation\LatentDirichletAllocation-master\Core\Core\bin\x64\Debug\Core.exe";
+            startInfo1.FileName = @"C:\eyad\Special Topics in Computer Science(1)\LDA\Tools\LatentDirichletAllocation\LatentDirichletAllocation-master\Core\Core\bin\x64\Debug\Core.exe";
             //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            startInfo.Arguments = path + " 0.5 0.1 " + textBoxTopicCount.Text + " " + textBoxTotal_Iteration_Steps.Text + " " + textBoxOutput_Model_Path.Text + "";
+            startInfo1.Arguments = path + " 0.5 0.1 " + textBoxTopicCount.Text + " " + textBoxTotal_Iteration_Steps.Text + " " + textBoxOutput_Model_Path.Text + "";
 
             //Dataset\newsdata.csv 0.5 0.1 1 1000 C:\Model
             try
             {
                 // Start the process with the info we specified.
                 // Call WaitForExit and then the using statement will close.
-                using (Process exeProcess = Process.Start(startInfo))
+                using (Process exeProcess = Process.Start(startInfo1))
                 {
                     exeProcess.WaitForExit();
+                    MessageBox.Show("done");
                 }
             }
             catch
@@ -135,6 +176,34 @@ namespace Viewer
 
         }
 
+        private void save_result(string file_path)
+        {
+            var csv = new StringBuilder();
+
+            //var newLine = string.Format("{0},{1}{2}", first, second, Environment.NewLine);
+            var newLine = "";
+            for (int i = 0; i < topicTable.Columns.Count; i++)
+            {
+                newLine += topicTable.Columns[i].ColumnName + ",";
+            }
+            newLine += Environment.NewLine;
+
+
+            //-----------------------------------------------------------
+            for (int i = 0; i < topicTable.Rows.Count; i++)
+            {
+                for (int j = 0; j < topicTable.Columns.Count; j++)
+                {
+                    newLine += topicTable.Rows[i][j].ToString() + ",";
+                }
+                newLine += Environment.NewLine;
+
+            }
+            csv.Append(newLine);
+            var filePath = file_path.Replace(".txt", ".csv");
+            File.WriteAllText(filePath, csv.ToString(), Encoding.UTF8);
+
+        }
         private void btnSave_Result_Click(object sender, EventArgs e)
         {
             var csv = new StringBuilder();

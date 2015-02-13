@@ -49,7 +49,7 @@ namespace Core
                 LogHelper.Log(ex);
             }
 
-            Console.ReadKey();
+            //Console.ReadKey();
         }
     }
 }

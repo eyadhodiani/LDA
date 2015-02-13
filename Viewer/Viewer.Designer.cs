@@ -31,6 +31,7 @@
             this.modelFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.buttonLoadModel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnSave_Result = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.textBoxOutput_Model_Path = new System.Windows.Forms.TextBox();
             this.textBoxTotal_Iteration_Steps = new System.Windows.Forms.TextBox();
@@ -44,7 +45,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.topicGridView = new System.Windows.Forms.DataGridView();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.btnSave_Result = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.topicGridView)).BeginInit();
             this.SuspendLayout();
@@ -82,6 +82,16 @@
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "LDA Param";
+            // 
+            // btnSave_Result
+            // 
+            this.btnSave_Result.Location = new System.Drawing.Point(13, 549);
+            this.btnSave_Result.Name = "btnSave_Result";
+            this.btnSave_Result.Size = new System.Drawing.Size(347, 69);
+            this.btnSave_Result.TabIndex = 4;
+            this.btnSave_Result.Text = "Save Result (csv)";
+            this.btnSave_Result.UseVisualStyleBackColor = true;
+            this.btnSave_Result.Click += new System.EventHandler(this.btnSave_Result_Click);
             // 
             // button1
             // 
@@ -167,7 +177,8 @@
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
             "Single file",
-            "Directory files"});
+            "Directory files",
+            "Directory with multiple Result"});
             this.comboBox1.Location = new System.Drawing.Point(25, 84);
             this.comboBox1.Margin = new System.Windows.Forms.Padding(0);
             this.comboBox1.Name = "comboBox1";
@@ -199,16 +210,6 @@
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // btnSave_Result
-            // 
-            this.btnSave_Result.Location = new System.Drawing.Point(13, 549);
-            this.btnSave_Result.Name = "btnSave_Result";
-            this.btnSave_Result.Size = new System.Drawing.Size(347, 69);
-            this.btnSave_Result.TabIndex = 4;
-            this.btnSave_Result.Text = "Save Result (csv)";
-            this.btnSave_Result.UseVisualStyleBackColor = true;
-            this.btnSave_Result.Click += new System.EventHandler(this.btnSave_Result_Click);
             // 
             // Viewer
             // 

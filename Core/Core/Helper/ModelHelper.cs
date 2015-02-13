@@ -1,7 +1,9 @@
 ﻿using Core.Data;
 using Core.Model;
+using Data;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -35,6 +37,20 @@ namespace Core.Helper
             }
         }
 
+        public static string getword(string root){
+            DataAccess cls = new DataAccess();
+            string sql = "select * from [roots] where root =N'" + root + "'";
+            DataSet ds = new DataSet();
+            string m = cls.getData(sql, ref ds);
+            if (ds.Tables[0].Rows.Count != 0)
+            {
+                return ds.Tables[0].Rows[0]["word"].ToString();
+            }
+            else
+            {
+                return root;
+            }
+        }
         public static void ExportVoca(string path)
         {
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
@@ -42,7 +58,7 @@ namespace Core.Helper
             using (var writer = new StreamWriter(Path.Combine(path, typeof(WordManager).Name + ".bin")))
             {
                 foreach (var wordItem in WordManager.WordIterator())
-                    writer.WriteLine("{0}:{1}", wordItem.Value, wordItem.Key);
+                    writer.WriteLine("{0}:{1}", wordItem.Value, getword(wordItem.Key));
             }
         }
 
